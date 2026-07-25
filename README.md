@@ -41,11 +41,11 @@ Small, readable, and tested against **physics**, not just execution. Every READM
 
 | Repository | What it proves |
 |---|---|
-| 🧠 [**pinn-acoustics**](https://github.com/Samarjithbiswas/pinn-acoustics) | A PyTorch PINN solves the wave equation with *zero* solution data (3.9% max error) and recovers a hidden wave speed from 80 noisy points to **0.08%** |
-| ⚡ [**fem-surrogate-toolkit**](https://github.com/Samarjithbiswas/fem-surrogate-toolkit) | The full surrogate pipeline: Latin-hypercube DoE → POD compression → ridge. A 128-point spectrum in **~3 µs/design** at held-out R² ≈ 0.95 |
-| 🎵 [**phononic-bands**](https://github.com/Samarjithbiswas/phononic-bands) | Bloch-Floquet band structures in pure NumPy/SciPy; reproduces the steel-in-epoxy benchmark gap with physics-checked tests |
-| 📡 [**saw-device-sim**](https://github.com/Samarjithbiswas/saw-device-sim) | Analytic IDT + transfer-matrix models of SAW devices, validated to **0.3%** against a published measured device |
-| 📊 [**modal-correlation**](https://github.com/Samarjithbiswas/modal-correlation) | MAC, mode pairing, and COMAC: the unglamorous glue that decides whether your FEA actually matches the bench |
+| 🧠 [**AcousticPINN**](https://github.com/Samarjithbiswas/AcousticPINN) | A PyTorch PINN solves the wave equation with *zero* solution data (3.9% max error) and recovers a hidden wave speed from 80 noisy points to **0.08%** |
+| ⚡ [**FEMSurrogateToolkit**](https://github.com/Samarjithbiswas/FEMSurrogateToolkit) | The full surrogate pipeline: Latin-hypercube DoE → POD compression → ridge. A 128-point spectrum in **~3 µs/design** at held-out R² ≈ 0.95 |
+| 🎵 [**PhononicBands**](https://github.com/Samarjithbiswas/PhononicBands) | Bloch-Floquet band structures in pure NumPy/SciPy; reproduces the steel-in-epoxy benchmark gap with physics-checked tests |
+| 📡 [**SAWDeviceSim**](https://github.com/Samarjithbiswas/SAWDeviceSim) | Analytic IDT + transfer-matrix models of SAW devices, validated to **0.3%** against a published measured device |
+| 📊 [**ModalCorrelation**](https://github.com/Samarjithbiswas/ModalCorrelation) | MAC, mode pairing, and COMAC: the unglamorous glue that decides whether your FEA actually matches the bench |
 
 ## 🧰 Toolbox
 
