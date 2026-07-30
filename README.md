@@ -39,34 +39,45 @@ whether a surrogate belongs in a design loop or only in a paper.
 
 ## What the work looks like
 
-Learned surrogates are only useful if you can say precisely how good they are and
-where they stop being good. Two examples from current work.
+Every figure below is plotted from data on disk. Nothing here is an illustration, and
+the code that produces them is in [`assets/make_real_figures.py`](assets/make_real_figures.py).
 
 <div align="center">
-<img src="assets/aero.svg" alt="Surface pressure field over a vehicle body with streamlines, separation point and wake vortices" width="100%">
+<img src="assets/drivaer_geometry.png" alt="Three real DrivAerNet++ surface point clouds with their measured drag coefficients" width="100%">
 </div>
 
-External aerodynamics is a useful proving ground because the physics is unforgiving
-and the ground truth is expensive. Stagnation at the nose, acceleration and suction
-over the greenhouse, separation where wall shear stress reaches zero, and a wake
-that sets most of the pressure drag. A surrogate has to get the field right, not
-just the integrated number.
+Real 8,000-point CFD surface clouds from DrivAerNet++, spanning measured drag from
+0.2192 to 0.3164. This is the actual input a geometric deep-learning surrogate consumes:
+an unordered point cloud with no mesh connectivity, which is why a dynamic-graph
+architecture that builds its own neighbourhoods is the right tool rather than a
+convolutional one.
 
 <div align="center">
-<img src="assets/surrogate.svg" alt="Learned aerodynamic surrogate: point cloud into a dynamic graph CNN, out to a drag coefficient, with a held-out parity plot" width="100%">
+<img src="assets/training.png" alt="Real 50-epoch training curve of the drag surrogate: validation R-squared and MAE" width="86%">
 </div>
 
-A dynamic-graph CNN reads a sampled surface point cloud and predicts a drag
-coefficient. On an 825-car held-out split of real DrivAerNet CFD data it reaches
-**R² 0.81** with a drag-coefficient MAE of **0.0082**, at millisecond inference.
+The real training log. Validation R² climbs from 0.26 to **0.809** and drag-coefficient
+MAE falls from 0.0175 to **0.0082**, on 825 held-out cars at 2,048 sampled points each.
 
-The parts usually left out of a summary matter more than the headline. That score is
-a validation number used for checkpoint selection rather than a sealed test result,
-and the split is random rather than the published one. The model was trained at
-2,048 sampled points, and evaluating it at 5,000 drops R² to roughly 0.59, which is a
-concrete lesson in why discretisation invariance is the property to care about in
-operator methods. The wall-shear-stress head is far weaker than the drag head. All of
-that belongs in the same paragraph as the good number.
+The caveats belong in the same breath as the number. That is a validation curve used for
+checkpoint selection, not a sealed test result, and the split is random rather than the
+authors' published one. The model was trained at 2,048 points; evaluating the same
+weights at 5,000 points drops R² to roughly 0.59, which is a concrete lesson in why
+discretisation invariance is the property to care about in operator learning. The
+wall-shear-stress head is far weaker than the drag head.
+
+<div align="center">
+<img src="assets/dataset.png" alt="Measured drag distribution across 8,121 DrivAerNet++ CFD runs" width="86%">
+</div>
+
+Why that error figure means anything: across 8,121 runs the drag coefficient has a
+standard deviation of 0.0201, so an MAE of 0.0082 is **0.41 standard deviations**. An R²
+quoted without the spread of its test set is not a claim, and this is the plot that makes
+it one.
+
+<sub>Geometry and drag data from **DrivAerNet++** (Elrefaie, Dai and Ahmed), used here for
+non-commercial research under its licence. The point clouds and drag coefficients are
+theirs; the surrogate, the training run and these plots are mine.</sub>
 
 ## Open-source engineering tools
 
@@ -75,6 +86,7 @@ Every README states the limits as plainly as the results.
 
 | Repository | What it demonstrates |
 |---|---|
+| [**neuralmesh**](https://github.com/Samarjithbiswas/neuralmesh) | Does global attention fix under-reaching in mesh graph networks? A controlled measurement: parameter counts matched to 0.7%, a no-communication control, and error resolved by distance from the boundary. Ground truth is a P1 FEM solver verified to **second order** (measured rates 1.947 and 1.987). 72 tests, CI on three Python versions |
 | [**AcousticPINN**](https://github.com/Samarjithbiswas/AcousticPINN) | A PyTorch physics-informed network solves the wave equation with *zero* solution data at 3.9% maximum error, and recovers a hidden wave speed from 80 noisy points to **0.08%** |
 | [**FEMSurrogateToolkit**](https://github.com/Samarjithbiswas/FEMSurrogateToolkit) | The full surrogate pipeline: Latin-hypercube design of experiments, POD compression, ridge regression. A 128-point spectrum in about **3 µs per design** at held-out R² ≈ 0.95 |
 | [**PhononicBands**](https://github.com/Samarjithbiswas/PhononicBands) | Bloch-Floquet band structures in pure NumPy and SciPy, reproducing the steel-in-epoxy benchmark gap with physics-checked tests |
